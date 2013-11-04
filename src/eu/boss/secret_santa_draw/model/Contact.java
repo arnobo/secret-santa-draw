@@ -9,6 +9,7 @@ public class Contact {
 	private String phoneNumber;
 	private ArrayList<Contact> incompatibleParticipant = new ArrayList<Contact>();
 	private Contact result;
+	private boolean isSelected;
 
 	public Contact() {
 	}
@@ -57,6 +58,14 @@ public class Contact {
 
 	public void setResult(Contact result) {
 		this.result = result;
+	}
+
+	public boolean isSelected() {
+		return isSelected;
+	}
+
+	public void setSelected(boolean isSelected) {
+		this.isSelected = isSelected;
 	}
 
 }
