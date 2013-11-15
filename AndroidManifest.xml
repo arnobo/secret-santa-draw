@@ -5,20 +5,19 @@
     android:versionName="1.0" >
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="14"
         android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.SEND_SMS" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
-        android:name="eu.boss.secret_santa_draw.SantaApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="eu.boss.secret_santa_draw.MainActivity"
+            android:name="eu.boss.secret_santa_draw.NewDrawActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait" >
             <intent-filter>
@@ -28,7 +27,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="eu.boss.secret_santa_draw.AllContactsListActivity"
+            android:name="eu.boss.secret_santa_draw.DrawConfirmActivity"
             android:screenOrientation="portrait" >
         </activity>
     </application>

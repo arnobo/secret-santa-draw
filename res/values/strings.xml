@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Secret_Santa_Draw</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Secret Santa Draw</string>
+    <string name="newDrawKey">Participants Selection</string>
+    <string name="validationKey">Confirmation</string>
+    <string name="sendKey">Draw lots !</string>
+    <string name="resultKey">You have drawn %s ! Congratulations !</string>
 
 </resources>

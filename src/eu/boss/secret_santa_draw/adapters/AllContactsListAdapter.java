@@ -7,13 +7,18 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
+import eu.boss.secret_santa_draw.NewDrawActivity;
 import eu.boss.secret_santa_draw.R;
 import eu.boss.secret_santa_draw.model.ContactList;
 
 public class AllContactsListAdapter extends AbstractContactListAdapter {
 
-	public AllContactsListAdapter(Context context, ContactList contacts) {
+	private NewDrawActivity mActivity;
+	private int numberContactSelected = 0;
+
+	public AllContactsListAdapter(Context context, ContactList contacts, NewDrawActivity activity) {
 		super(context, contacts);
+		mActivity = activity;
 	}
 
 	private class ViewHolder {
@@ -42,9 +47,15 @@ public class AllContactsListAdapter extends AbstractContactListAdapter {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				contactList.getParticipantList().get(position).setSelected(isChecked);
+				if (isChecked) numberContactSelected++;
+				else numberContactSelected--;
+
+				mActivity.updateMenu(numberContactSelected);
+
 			}
 
 		});
 		return convertView;
 	}
+
 }

@@ -1,9 +1,11 @@
 package eu.boss.secret_santa_draw.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Contact {
+public class Contact implements Serializable {
 
+	private static final long serialVersionUID = -4917534996998806369L;
 	private String id;
 	private String name;
 	private String phoneNumber;
