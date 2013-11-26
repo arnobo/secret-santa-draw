@@ -5,6 +5,9 @@
     <string name="newDrawKey">Participants Selection</string>
     <string name="validationKey">Confirmation</string>
     <string name="sendKey">Draw lots !</string>
-    <string name="resultKey">You have drawn %s ! Congratulations !</string>
+    <string name="resultKey">You have drawn %1$s ! Congratulations !</string>
+    <string name="addConstraintKey">Add constraint</string>
+    <string name="confirmDeleteTitle">Confirm action</string>
+    <string name="confirmDelete">Are You sure you want to remove %1$s ?</string>
 
 </resources>

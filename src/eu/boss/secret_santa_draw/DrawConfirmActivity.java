@@ -3,6 +3,9 @@ package eu.boss.secret_santa_draw;
 import java.util.Iterator;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,5 +64,27 @@ public class DrawConfirmActivity extends Activity {
 	private void sendSMS(String phoneNumber, String contents) {
 		// SmsManager smsManager = SmsManager.getDefault();
 		// smsManager.sendTextMessage(phoneNumber, null, contents, null, null);
+	}
+
+	public void openConstraintDialog(int position) {
+
+	}
+
+	public void openYesNoDialog(final int position) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.confirmDeleteTitle));
+		builder.setMessage(String.format(getString(R.string.confirmDelete), selectedContacts
+				.getParticipantList().get(position).getName()));
+		builder.setPositiveButton(getString(android.R.string.yes), new OnClickListener() {
+
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				selectedContacts.getParticipantList().remove(position);
+				// TODO: notifysetdatachanged
+			}
+		});
+
+		builder.setNegativeButton(getString(android.R.string.no), null);
+		builder.show();
 	}
 }
