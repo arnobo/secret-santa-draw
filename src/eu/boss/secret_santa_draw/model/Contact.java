@@ -12,6 +12,7 @@ public class Contact implements Serializable {
 	private ArrayList<Contact> incompatibleParticipant = new ArrayList<Contact>();
 	private Contact result;
 	private boolean isSelected;
+	private boolean isDrawn;
 
 	public Contact() {
 	}
@@ -68,6 +69,14 @@ public class Contact implements Serializable {
 
 	public void setSelected(boolean isSelected) {
 		this.isSelected = isSelected;
+	}
+
+	public boolean isDrawn() {
+		return isDrawn;
+	}
+
+	public void setDrawn(boolean isDrawn) {
+		this.isDrawn = isDrawn;
 	}
 
 }
