@@ -9,5 +9,7 @@
     <string name="addConstraintKey">Add constraint</string>
     <string name="confirmDeleteTitle">Confirm action</string>
     <string name="confirmDelete">Are You sure you want to remove %1$s ?</string>
+    <string name="confirmSMSTitle">Confirm SMS sending </string>
+    <string name="confirmSMS">Draw success ! Send SMS ?</string>
 
 </resources>

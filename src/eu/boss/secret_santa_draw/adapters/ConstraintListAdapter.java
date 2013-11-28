@@ -8,20 +8,22 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.TextView;
-import eu.boss.secret_santa_draw.NewDrawActivity;
 import eu.boss.secret_santa_draw.R;
+import eu.boss.secret_santa_draw.model.Contact;
 import eu.boss.secret_santa_draw.model.ContactList;
 
-public class AllContactsListAdapter extends AbstractContactListAdapter {
+public class ConstraintListAdapter extends AbstractContactListAdapter {
 
-	private NewDrawActivity mActivity;
-	private int numberContactSelected = 0;
+	private ListView mListView;
 	private boolean[] mCheckedState;
+	private Contact mSelectedContact;
 
-	public AllContactsListAdapter(Context context, ContactList contacts, NewDrawActivity activity) {
+	public ConstraintListAdapter(Context context, ContactList contacts, Contact selectedContact,
+			ListView listView) {
 		super(context, contacts);
-		mActivity = activity;
 		mCheckedState = new boolean[contacts.getParticipantList().size()];
+		mSelectedContact = selectedContact;
+		mListView = listView;
 	}
 
 	private class ViewHolder {
@@ -46,23 +48,26 @@ public class AllContactsListAdapter extends AbstractContactListAdapter {
 		holder.tvName.setText(contactList.getParticipantList().get(position).getName());
 		holder.cbSelected.setOnCheckedChangeListener(null);
 		holder.cbSelected.setChecked(mCheckedState[position]);
+		if (mSelectedContact.getIncompatibleParticipant().contains(
+				contactList.getParticipantList().get(position))) {
+			holder.cbSelected.setChecked(true);
+			mCheckedState[position] = true;
+		}
 		holder.cbSelected.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				contactList.getParticipantList().get(position).setSelected(isChecked);
-				final int position = mActivity.getListView().getPositionForView(buttonView);
+
+				mSelectedContact.getIncompatibleParticipant().add(
+						contactList.getParticipantList().get(position));
+				final int position = mListView.getPositionForView(buttonView);
 				if (position != ListView.INVALID_POSITION) {
 					mCheckedState[position] = isChecked;
 				}
-				if (isChecked) numberContactSelected++;
-				else numberContactSelected--;
-
-				mActivity.updateMenu(numberContactSelected);
-
 			}
 
 		});
+
 		return convertView;
 	}
 

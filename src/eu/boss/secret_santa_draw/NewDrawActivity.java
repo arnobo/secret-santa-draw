@@ -42,14 +42,28 @@ public class NewDrawActivity extends Activity {
 		if (cur.getCount() > 0) {
 			String id;
 			String name;
+			String phoneNumber = "";
 			while (cur.moveToNext()) {
-				Contact p = new Contact();
-				id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-				name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-				p.setId(id);
-				p.setName(name);
-				Log.i("Name: " + name, "Id: " + id);
-				mContactList.addParticipant(p);
+				if (Integer.parseInt(cur.getString(cur
+						.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+					id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+					name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+
+					Cursor pCur = getContentResolver().query(
+							ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+							null,
+							ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = "
+									+ cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID)),
+							null, null);
+					while (pCur.moveToNext()) {
+						phoneNumber = (pCur.getString(pCur.getColumnIndex("DATA1")));
+					}
+					pCur.close();
+
+					Contact p = new Contact(name, id, phoneNumber);
+					Log.i("Name: " + name, "Id: " + id);
+					mContactList.addParticipant(p);
+				}
 			}
 		}
 		cur.close();
@@ -79,6 +93,10 @@ public class NewDrawActivity extends Activity {
 		showMenu = (selected > 0) ? true : false;
 
 		invalidateOptionsMenu();
+	}
+
+	public ListView getListView() {
+		return mListView;
 	}
 
 }

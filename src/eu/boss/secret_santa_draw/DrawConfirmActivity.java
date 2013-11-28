@@ -6,17 +6,23 @@ import java.util.Random;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
+import android.telephony.gsm.SmsManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ListView;
+import eu.boss.secret_santa_draw.adapters.ConstraintListAdapter;
 import eu.boss.secret_santa_draw.adapters.ParticipantsListAdapter;
 import eu.boss.secret_santa_draw.model.Contact;
 import eu.boss.secret_santa_draw.model.ContactList;
 
+@SuppressWarnings("deprecation")
 public class DrawConfirmActivity extends Activity {
 
 	private ListView mListView;
@@ -57,7 +63,6 @@ public class DrawConfirmActivity extends Activity {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
 		startDraw();
 		return true;
 	}
@@ -69,10 +74,9 @@ public class DrawConfirmActivity extends Activity {
 			Contact c = it.next();
 			restart = drawForContact(c);
 			Log.d(c.getName() + " a tiré au sort", c.getResult().getName());
-			// sendSMS(c.getPhoneNumber(),
-			// String.format(getString(R.string.resultKey), c.getResult().getName()));
 		}
 		if (restart) startDraw();
+		confirmSMSSent();
 	}
 
 	private boolean drawForContact(Contact c) {
@@ -84,7 +88,7 @@ public class DrawConfirmActivity extends Activity {
 		boolean restartDraw = false, drawDone = false;
 		int compteur = 0;
 		while ((!drawDone) && (!restartDraw)) {
-
+			Iterator<Contact> it = c.getIncompatibleParticipant().iterator();
 			int position = lower + r.nextInt(higher - lower);
 			if ((!c.getIncompatibleParticipant().contains(contacts.get(position)))
 					&& (!contacts.get(position).isDrawn())) {
@@ -102,30 +106,81 @@ public class DrawConfirmActivity extends Activity {
 		return restartDraw;
 	}
 
+	private void sendSMSAllList() {
+		Iterator<Contact> it = selectedContacts.getParticipantList().iterator();
+		while (it.hasNext()) {
+			Contact c = it.next();
+			Log.d("Phone " + c.getName(), c.getPhoneNumber());
+			sendSMS(c.getPhoneNumber(),
+					String.format(getString(R.string.resultKey), c.getResult().getName()));
+		}
+	}
+
 	private void sendSMS(String phoneNumber, String contents) {
-		// SmsManager smsManager = SmsManager.getDefault();
-		// smsManager.sendTextMessage(phoneNumber, null, contents, null, null);
+		SmsManager smsManager = SmsManager.getDefault();
+		smsManager.sendTextMessage(phoneNumber, null, contents, null, null);
 	}
 
-	public void openConstraintDialog(int position) {
-
-	}
-
-	public void openYesNoDialog(final int position) {
+	public void confirmSMSSent() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setTitle(getString(R.string.confirmDeleteTitle));
-		builder.setMessage(String.format(getString(R.string.confirmDelete), selectedContacts
-				.getParticipantList().get(position).getName()));
+		builder.setTitle(getString(R.string.confirmSMSTitle));
+		builder.setMessage(getString(R.string.confirmSMS));
 		builder.setPositiveButton(getString(android.R.string.yes), new OnClickListener() {
 
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				selectedContacts.getParticipantList().remove(position);
-				mAdapter.notifyDataSetChanged();
+				sendSMSAllList();
+
 			}
 		});
 
 		builder.setNegativeButton(getString(android.R.string.no), null);
 		builder.show();
+	}
+
+	public void openYesNoDialog(final int position) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setTitle(getString(R.string.confirmDeleteTitle));
+		builder.setMessage(
+				String.format(getString(R.string.confirmDelete), selectedContacts.getParticipantList()
+						.get(position).getName())).setPositiveButton(getString(android.R.string.yes),
+				new OnClickListener() {
+
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						selectedContacts.getParticipantList().remove(position);
+						mAdapter.notifyDataSetChanged();
+						dialog.dismiss();
+					}
+				});
+
+		builder.setNegativeButton(getString(android.R.string.no),
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.dismiss();
+					}
+				});
+		builder.show();
+	}
+
+	public void openConstraintDialog(final int position) {
+		final Dialog dialog = new Dialog(DrawConfirmActivity.this, R.style.FullHeightDialog);
+		dialog.setContentView(R.layout.custom_dialog);
+		Button btnOk = (Button) dialog.findViewById(R.id.btnDialogConfirm);
+		ListView lv = (ListView) dialog.findViewById(R.id.lvDialog);
+		lv.setAdapter(new ConstraintListAdapter(DrawConfirmActivity.this, selectedContacts,
+				selectedContacts.getParticipantList().get(position), lv));
+		// if button is clicked, close the custom dialog
+		View.OnClickListener listener = new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				dialog.dismiss();
+			}
+		};
+		btnOk.setOnClickListener(listener);
+		dialog.show();
+
 	}
 }

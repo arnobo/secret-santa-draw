@@ -8,6 +8,7 @@
     <string name="resultKey">Vous avez tiré au sort %1$s ! Félicitations !</string>
     <string name="addConstraintKey">Contraintes</string>
     <string name="confirmDeleteTitle">Confirmer suppression</string>
-    <string name="confirmDelete">Êtes-vous sûr de vouloir supprimer %1$s du tirage ??</string>
-
+    <string name="confirmDelete">Êtes-vous sûr de vouloir supprimer %1$s du tirage ?</string>
+    <string name="confirmSMS">Tirage au sort effectué ! Envoyer un SMS aux participants ?</string>
+    
 </resources>

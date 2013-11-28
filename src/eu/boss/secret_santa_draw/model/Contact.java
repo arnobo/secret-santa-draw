@@ -17,6 +17,13 @@ public class Contact implements Serializable {
 	public Contact() {
 	}
 
+	public Contact(String name, String id, String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+		this.name = name;
+		this.id = id;
+		this.incompatibleParticipant.add(this);
+	}
+
 	public Contact(String name, String id) {
 		this.name = name;
 		this.id = id;
